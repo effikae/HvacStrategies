@@ -17,38 +17,33 @@
 % Define block styles 
 % https://texample.net/tikz/examples/simple-flow-chart/
 
-\input{./figure/figura1.Rnw}
+% Diagrama de bloques
+%\input{./figure/figura1.Rnw}
 
-% Define block styles
-\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-    text width=5em, text centered, rounded corners, minimum height=4em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
-    minimum height=2em]
-    
-\begin{tikzpicture}[node distance = 2cm, auto]
-    % Place nodes
-    \node [block] (init) {initialize model};
-    \node [cloud, left of=init] (expert) {expert};
-    \node [cloud, right of=init] (system) {system};
-    \node [block, below of=init] (identify) {identify candidate models};
-    \node [block, below of=identify] (evaluate) {evaluate candidate models};
-    \node [block, left of=evaluate, node distance=3cm] (update) {update model};
-    \node [decision, below of=evaluate] (decide) {is best candidate better?};
-    \node [block, below of=decide, node distance=3cm] (stop) {stop};
-    % Draw edges
-    \path [line] (init) -- (identify);
-    \path [line] (identify) -- (evaluate);
-    \path [line] (evaluate) -- (decide);
-    \path [line] (decide) -| node [near start] {yes} (update);
-    \path [line] (update) |- (identify);
-    \path [line] (decide) -- node {no}(stop);
-    \path [line,dashed] (expert) -- (init);
-    \path [line,dashed] (system) -- (init);
-    \path [line,dashed] (system) |- (evaluate);
-\end{tikzpicture}
+<<reg, echo = FALSE, results=hide>>=
+
+# Libraries
+library(ggplot2)
+library(hrbrthemes)
+
+# create data
+impedance_tbti <- c(0.480, 0.549, 0.630, 0.724, 0.833, 0.961, 1.110, 1.484, 1.985, 2.641, 3.470, 4.460, 6.663, 7.668, 8.102, 8.482, 8.807, 9.078, 9.299, 9.476)
+degree <- c(110,105,100,95,90,85,80,70,60,50,40,30,10,0,-5,-10,-15,-20,-25,-30)
+df <- data.frame(impedance_tbti,degree)
+
+# Plot
+ggplot(df, aes(x=degree, y=impedance_tbti)) +
+  geom_line( color="#69b3a2", size=1, alpha=0.9, linetype=2) +
+  
+  theme_ipsum() +
+  ggtitle("Sondas de temperatura 10K")
+
+
+@
+
+
+
+
 
 
 
